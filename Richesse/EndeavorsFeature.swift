@@ -43,6 +43,7 @@ struct EndeavorsView: View {
 
     var body: some View {
         List {
+            // TODO: Add adding endeavor button/view
             ForEach(store.endeavors) { endeavor in
                 HStack {
                     Image(systemName: endeavor.completed ? "circle.fill" : "circle")

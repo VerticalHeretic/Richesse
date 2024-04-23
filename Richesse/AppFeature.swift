@@ -5,8 +5,8 @@
 //  Created by Łukasz Stachnik on 23/04/2024.
 //
 
-import SwiftUI
 import ComposableArchitecture
+import SwiftUI
 
 @Reducer
 struct AppFeature {
@@ -24,7 +24,7 @@ struct AppFeature {
         }
 
         Reduce { _, _ in
-            return .none
+            .none
         }
     }
 }
@@ -36,7 +36,7 @@ struct AppView: View {
         NavigationSplitView(sidebar: {
             EndeavorsView(store: store.scope(state: \.endeavorsPanel, action: \.endeavorsPanel))
         }, detail: {
-
+            // TODO: Add calendar view (static)
         })
     }
 }
