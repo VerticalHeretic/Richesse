@@ -14,15 +14,21 @@ struct EditEndeavorFeature {
     struct State: Equatable {
         var endeavor: Endeavor
         var focusField: Field? = nil
+        var hoverField: Field? = nil
 
         enum Field: String, Hashable {
+            case completeToggle
+            case durationMenu
             case name
         }
     }
 
     enum Action {
         case setFocusField(State.Field?)
+        case setHoverField(State.Field?)
+        case toggleCompleted
         case setName(String)
+        case setDuration(Duration?)
         case saveChangesTriggered
         case delegate(Delegate)
 
@@ -37,11 +43,20 @@ struct EditEndeavorFeature {
     var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
+            case .toggleCompleted:
+                state.endeavor.completed.toggle()
+                return .none
             case .setFocusField(let field):
                 state.focusField = field
                 return .none
             case .setName(let name):
                 state.endeavor.name = name
+                return .none
+            case .setDuration(let duration):
+                state.endeavor.duration = duration
+                return .none
+            case .setHoverField(let field):
+                state.hoverField = field
                 return .none
             case .delegate:
                 return .none
@@ -60,10 +75,53 @@ struct EndeavorEditView: View {
 
     var body: some View {
         VStack {
-            TextField("Name", text: $store.endeavor.name.sending(\.setName))
-                .onSubmit {
-                    store.send(.saveChangesTriggered)
+            HStack {
+                Image(systemName: store.endeavor.completed ? "circle.fill" : "circle")
+                    .resizable()
+                    .frame(width: 20, height: 20)
+                    .onTapGesture {
+                        store.send(.toggleCompleted)
+                    }
+                    .onHover { hovering in
+                        store.send(.setHoverField(hovering ? .completeToggle : nil))
+                    }
+
+                TextField("Name", text: $store.endeavor.name.sending(\.setName))
+                    .onSubmit {
+                        store.send(.saveChangesTriggered)
+                    }
+                    .onHover { hovering in
+                        store.send(.setHoverField(hovering ? .name : nil))
+                    }
+            }
+
+            Spacer()
+
+            HStack {
+                Menu {
+                    Button("30m") { store.send(.setDuration(.minutes(30))) }
+                    Button("1h") { store.send(.setDuration(.minutes(60))) }
+                    Button("2h") { store.send(.setDuration(.minutes(2 * 60))) }
+                    Button("3h") { store.send(.setDuration(.minutes(3 * 60))) }
+                    Button("4h") { store.send(.setDuration(.minutes(4 * 60))) }
+                } label: {
+                    if let duration = store.endeavor.duration {
+                        Text(duration, format: .time(pattern: .hourMinute))
+                    } else {
+                        Image(systemName: "hourglass")
+                    }
                 }
+                .border(store.hoverField == .durationMenu ? Color.red : Color.clear)
+                .onHover { hovering in
+                    store.send(.setHoverField(hovering ? .durationMenu : nil))
+                }
+                .menuStyle(.borderlessButton)
+                .menuIndicator(.hidden)
+
+                Spacer()
+            }
         }
+        .padding()
+        .frame(minWidth: 200, minHeight: 200)
     }
 }

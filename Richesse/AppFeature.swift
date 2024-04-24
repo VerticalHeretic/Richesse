@@ -46,6 +46,7 @@ struct AppView: View {
                 }, label: {
                     Image(systemName: "plus")
                 })
+                .keyboardShortcut("n")
             }
             .padding()
         }

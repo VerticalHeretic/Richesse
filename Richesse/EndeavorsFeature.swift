@@ -25,6 +25,7 @@ struct EndeavorsFeature {
 
     enum Action {
         case addButtonTapped
+        case completeButtonTapped(UUID)
         case destination(PresentationAction<Destination.Action>)
     }
 
@@ -36,6 +37,11 @@ struct EndeavorsFeature {
             case .addButtonTapped:
                 let endeavor = Endeavor(id: uuid(), name: "")
                 state.destination = .editEndeavor(EditEndeavorFeature.State(endeavor: endeavor))
+                return .none
+            case .completeButtonTapped(let id):
+                if let index = state.endeavors.index(id: id) {
+                    state.endeavors[index].completed.toggle()
+                }
                 return .none
             case let .destination(.presented(.editEndeavor(.delegate(.saveChanges(endeavor))))):
                 if let index = state.endeavors.index(id: endeavor.id) {
@@ -64,14 +70,13 @@ struct EndeavorsView: View {
 
     var body: some View {
         List {
-            // TODO: Add adding endeavor button/view
             ForEach(store.endeavors) { endeavor in
                 HStack {
                     Image(systemName: endeavor.completed ? "circle.fill" : "circle")
                         .resizable()
                         .frame(width: 20, height: 20)
                         .onTapGesture {
-                            // TODO: Add complete action and some animation
+                            store.send(.completeButtonTapped(endeavor.id))
                         }
 
                     VStack(alignment: .leading) {
