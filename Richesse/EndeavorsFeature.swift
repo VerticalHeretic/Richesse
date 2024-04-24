@@ -11,7 +11,7 @@ import SwiftUI
 struct Endeavor: Equatable, Identifiable {
     let id: UUID
     var name: String
-    var duration: Duration
+    var duration: Duration?
     var completed = false
 }
 
@@ -20,21 +20,42 @@ struct EndeavorsFeature {
     @ObservableState
     struct State: Equatable {
         var endeavors: IdentifiedArrayOf<Endeavor> = []
+        @Presents var destination: Destination.State?
     }
 
     enum Action {
         case addButtonTapped
+        case destination(PresentationAction<Destination.Action>)
     }
 
     @Dependency(\.uuid) var uuid
 
     var body: some ReducerOf<Self> {
-        Reduce { _, action in
+        Reduce { state, action in
             switch action {
             case .addButtonTapped:
-                .none
+                let endeavor = Endeavor(id: uuid(), name: "")
+                state.destination = .editEndeavor(EditEndeavorFeature.State(endeavor: endeavor))
+                return .none
+            case let .destination(.presented(.editEndeavor(.delegate(.saveChanges(endeavor))))):
+                if let index = state.endeavors.index(id: endeavor.id) {
+                    state.endeavors[index] = endeavor
+                } else {
+                    state.endeavors.append(endeavor)
+                }
+                return .none
+            case .destination:
+                return .none
             }
         }
+        .ifLet(\.$destination, action: \.destination)
+    }
+}
+
+extension EndeavorsFeature {
+    @Reducer(state: .equatable)
+    enum Destination {
+        case editEndeavor(EditEndeavorFeature)
     }
 }
 
@@ -56,15 +77,25 @@ struct EndeavorsView: View {
                     VStack(alignment: .leading) {
                         Text(endeavor.name)
                             .border(.red)
-                        Text(endeavor.duration, format: .time(pattern: .hourMinute))
-                            .font(.footnote)
-                            .border(.blue)
+                        if let duration = endeavor.duration {
+                            Text(duration, format: .time(pattern: .hourMinute))
+                                .font(.footnote)
+                                .border(.blue)
+                        }
                     }
                 }
             }
         }
+        .sheet(item: $store.scope(
+            state: \.destination?.editEndeavor,
+            action: \.destination.editEndeavor
+        )) { editStore in
+            EndeavorEditView(store: editStore)
+        }
     }
 }
+
+
 
 #Preview {
     EndeavorsView(store: Store(initialState: EndeavorsFeature.State(

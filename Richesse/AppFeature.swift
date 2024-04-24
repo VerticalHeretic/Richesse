@@ -33,11 +33,22 @@ struct AppView: View {
     let store: StoreOf<AppFeature>
 
     var body: some View {
-        NavigationSplitView(sidebar: {
-            EndeavorsView(store: store.scope(state: \.endeavorsPanel, action: \.endeavorsPanel))
-        }, detail: {
-            // TODO: Add calendar view (static)
-        })
+        ZStack(alignment: .bottom) {
+            NavigationSplitView(sidebar: {
+                EndeavorsView(store: store.scope(state: \.endeavorsPanel, action: \.endeavorsPanel))
+            }, detail: {
+                // TODO: Add calendar view (static)
+            })
+
+            HStack {
+                Button(action: {
+                    store.send(.endeavorsPanel(.addButtonTapped))
+                }, label: {
+                    Image(systemName: "plus")
+                })
+            }
+            .padding()
+        }
     }
 }
 

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A0775E8A2BD93C5900F4344D /* EditEndeavorFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0775E892BD93C5900F4344D /* EditEndeavorFeature.swift */; };
 		A0D90A982BD7E99200AEE326 /* RichesseApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D90A972BD7E99200AEE326 /* RichesseApp.swift */; };
 		A0D90A9A2BD7E99200AEE326 /* AppFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D90A992BD7E99200AEE326 /* AppFeature.swift */; };
 		A0D90A9C2BD7E99400AEE326 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A0D90A9B2BD7E99400AEE326 /* Assets.xcassets */; };
@@ -16,6 +17,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A0775E892BD93C5900F4344D /* EditEndeavorFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditEndeavorFeature.swift; sourceTree = "<group>"; };
 		A0D90A942BD7E99200AEE326 /* Richesse.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Richesse.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A0D90A972BD7E99200AEE326 /* RichesseApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RichesseApp.swift; sourceTree = "<group>"; };
 		A0D90A992BD7E99200AEE326 /* AppFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFeature.swift; sourceTree = "<group>"; };
@@ -62,6 +64,7 @@
 				A0D90AA02BD7E99400AEE326 /* Richesse.entitlements */,
 				A0D90A9D2BD7E99400AEE326 /* Preview Content */,
 				A0D90AA92BD7EA1300AEE326 /* EndeavorsFeature.swift */,
+				A0775E892BD93C5900F4344D /* EditEndeavorFeature.swift */,
 			);
 			path = Richesse;
 			sourceTree = "<group>";
@@ -152,6 +155,7 @@
 			files = (
 				A0D90A9A2BD7E99200AEE326 /* AppFeature.swift in Sources */,
 				A0D90A982BD7E99200AEE326 /* RichesseApp.swift in Sources */,
+				A0775E8A2BD93C5900F4344D /* EditEndeavorFeature.swift in Sources */,
 				A0D90AAA2BD7EA1300AEE326 /* EndeavorsFeature.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
