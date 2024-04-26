@@ -13,12 +13,15 @@ struct Endeavors {
     @ObservableState
     struct State: Equatable {
         var endeavors: IdentifiedArrayOf<Endeavor.State> = []
+        var selectedEndeavor: Endeavor.State?
     }
 
     enum Action {
         case addButtonTapped
         case binding(BindingAction<State>)
         case endeavors(IdentifiedActionOf<Endeavor>)
+        case endeavorSelected(Endeavor.State?)
+        case delete(IndexSet)
     }
 
     @Dependency(\.uuid) var uuid
@@ -33,6 +36,14 @@ struct Endeavors {
                 return .none
             case .endeavors:
                 return .none
+            case .delete(let indexSet):
+                indexSet.forEach {
+                    state.endeavors.remove(at: $0)
+                }
+                return .none
+            case .endeavorSelected(let endeavor):
+                state.selectedEndeavor = endeavor
+                return .none
             }
         }
         .forEach(\.endeavors, action: \.endeavors) {
@@ -45,11 +56,16 @@ struct EndeavorsView: View {
     @Bindable var store: StoreOf<Endeavors>
 
     var body: some View {
-        List {
-            ForEach(store.scope(state: \.endeavors, action: \.endeavors)) { store in
-                EndeavorView(store: store)
-            }
+        List(store.scope(state: \.endeavors, action: \.endeavors), selection: $store.selectedEndeavor.sending(\.endeavorSelected)) { store in
+            EndeavorView(store: store)
         }
+//        .onAppear {
+//            NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
+//                print(event.keyCode)
+//
+//                return event
+//            }
+//        }
     }
 }
 
