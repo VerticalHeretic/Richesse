@@ -11,16 +11,16 @@ import SwiftUI
 @Reducer
 struct AppFeature {
     struct State: Equatable {
-        var endeavorsPanel = EndeavorsFeature.State()
+        var endeavorsPanel = Endeavors.State()
     }
 
     enum Action {
-        case endeavorsPanel(EndeavorsFeature.Action)
+        case endeavorsPanel(Endeavors.Action)
     }
 
     var body: some ReducerOf<Self> {
         Scope(state: \.endeavorsPanel, action: \.endeavorsPanel) {
-            EndeavorsFeature()
+            Endeavors()
         }
 
         Reduce { _, _ in
