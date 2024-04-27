@@ -16,7 +16,6 @@ struct Endeavor {
         var name = ""
         var duration: Duration?
         var isCompleted = false
-        var isSelected = false
     }
 
     enum Action: BindableAction, Sendable {
@@ -42,50 +41,35 @@ struct EndeavorView: View {
             }
             .buttonStyle(.plain)
 
-            if store.isSelected {
-                TextField("Untitled Endeavor", text: $store.name) // TODO: Add focus on appear
-            } else {
-                Text(store.name)
-                    .frame(maxWidth: .infinity)
-                    .border(.red)
-            }
+            TextField("Untitled Endeavor", text: $store.name) // TODO: Add focus on appear
 
-            Spacer()
-
-            if store.isSelected {
-                Menu {
-                    Button("0.5h") {
-                        store.duration = .minutes(30)
-                    }
-
-                    Button("1h") {
-                        store.duration = .minutes(60)
-                    }
-
-                    Button("1.5h") {
-                        store.duration = .minutes(90)
-                    }
-
-                    Button("2h") {
-                        store.duration = .minutes(120)
-                    }
-                } label: {
-                    if let duration = store.duration {
-                        Text(duration, format: .time(pattern: .hourMinute))
-                    } else {
-                        Image(systemName: "hourglass")
-                    }
+            Menu {
+                Button("0.5h") {
+                    store.duration = .minutes(30)
                 }
-                .menuIndicator(.hidden)
-                .fixedSize()
-            } else if let duration = store.duration {
-                Text(duration, format: .time(pattern: .hourMinute))
+
+                Button("1h") {
+                    store.duration = .minutes(60)
+                }
+
+                Button("1.5h") {
+                    store.duration = .minutes(90)
+                }
+
+                Button("2h") {
+                    store.duration = .minutes(120)
+                }
+            } label: {
+                if let duration = store.duration {
+                    Text(duration, format: .time(pattern: .hourMinute))
+                } else {
+                    Image(systemName: "hourglass")
+                }
             }
+            .menuIndicator(.hidden)
+            .fixedSize()
         }
         .contentShape(Rectangle())
-        .onTapGesture {
-            store.isSelected.toggle()
-        }
     }
 }
 
