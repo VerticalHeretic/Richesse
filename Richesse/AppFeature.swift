@@ -34,11 +34,9 @@ struct AppView: View {
 
     var body: some View {
         ZStack(alignment: .bottom) {
-            NavigationSplitView(sidebar: {
+            HSplitView {
                 EndeavorsView(store: store.scope(state: \.endeavorsPanel, action: \.endeavorsPanel))
-            }, detail: {
-                // TODO: Add calendar view (static)
-            })
+            }
 
             HStack {
                 Button(action: {

@@ -56,16 +56,9 @@ struct EndeavorsView: View {
     @Bindable var store: StoreOf<Endeavors>
 
     var body: some View {
-        List(store.scope(state: \.endeavors, action: \.endeavors), selection: $store.selectedEndeavor.sending(\.endeavorSelected)) { store in
+        List(store.scope(state: \.endeavors, action: \.endeavors), id: \.self, selection: $store.selectedEndeavor.sending(\.endeavorSelected)) { store in
             EndeavorView(store: store)
         }
-//        .onAppear {
-//            NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
-//                print(event.keyCode)
-//
-//                return event
-//            }
-//        }
     }
 }
 
